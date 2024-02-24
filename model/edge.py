@@ -1,7 +1,14 @@
-from node import Node
+from __future__ import annotations
 
+#region Type Checking
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from model.node import Node
+#endregion
+    
 class Edge:
-    weight: int = 0
+    weight: float = 0
     
     source_id: int = 0
     source_node: Node = None
@@ -19,3 +26,17 @@ class Edge:
         
         self.destination_id = destination.id
         self.destination_node = destination
+
+    def __repr__(self):
+        import json
+
+        readable_data = {
+            'weight': self.weight,
+            'source_id': self.source_id,
+            'destination_id': self.destination_id,
+            'bidirection': self.bidirection,
+
+            '__classname__': str(self.__class__.__name__)
+        }
+
+        return readable_data
