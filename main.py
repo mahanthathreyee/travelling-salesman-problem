@@ -4,7 +4,7 @@ from util import input_handler
 from util import arg_parser
 
 from core import graph
-from core import dijkstra
+from core.dijkstra import dijkstra_tsp
 
 DEFAULT_INPUT_FILE = './data/input/tsp-problem-10-30-75-25-1.txt'
 
@@ -31,9 +31,8 @@ if __name__ == "__main__":
     n_cities = len(input_matrix)
     cities = graph.construct_from_matrix(input_matrix)
 
-    dijkstra.compute_shortest_path(
+    dijkstra_tsp.compute_tour(
         source_id=0,
-        destination_id=3,
         n_cities=n_cities,
         city_graph=cities
     )
