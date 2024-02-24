@@ -16,8 +16,6 @@ class Edge:
     destination_id: int = 0
     destination_node: Node = None
 
-    bidirection = True
-
     def __init__(self, weight: int, source: Node, destination: Node) -> None:
         self.weight = weight
         
