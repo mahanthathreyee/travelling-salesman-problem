@@ -1,5 +1,5 @@
 class State:
-    cost: int = 0
+    cost: float = 0
     current_city_id: int = None
     path: list[int] = []
     unvisited: set[int] = set()
@@ -20,7 +20,7 @@ class State:
     def __le__(self, other):
         return self.cost <= other.cost
     
-    def construct_new_state(self, neighbor_id: int, cost: int) -> 'State':
+    def construct_new_state(self, neighbor_id: int, cost: float) -> 'State':
         new_state = State(
             source_id=neighbor_id, 
             n_cities=self._n_cities, 
