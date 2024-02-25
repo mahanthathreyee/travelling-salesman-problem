@@ -8,8 +8,9 @@ from util import arg_parser
 from core import graph
 from core.algorithm_runner import AlgorithmRunner
 
+from algorithms import algorithm_factory
 from algorithms.algorithm_base import AlgorithmBase
-from algorithms.impl.dijkstra_tsp import DijikstraTSP
+from algorithms.impl.a_star import AStar
 
 def parse_input(input_file: str):
     graph_file = Path(input_file)
@@ -29,7 +30,8 @@ def get_input():
     return args, input_matrix
 
 def process_algorithm(args: Namespace):
-    algorithm: AlgorithmBase = DijikstraTSP(
+    algorithm: AlgorithmBase = algorithm_factory.get_algorithm(args.algorithm)
+    algorithm = algorithm(
         args=args,
         n_cities=n_cities,
         city_graph=city_graph
@@ -46,6 +48,5 @@ if __name__ == "__main__":
     n_cities = len(input_matrix)
     city_graph = graph.construct_from_matrix(input_matrix)
 
-    results.append(process_algorithm(args))
-
+    process_algorithm(args)
     print(pd.DataFrame(results).to_markdown())

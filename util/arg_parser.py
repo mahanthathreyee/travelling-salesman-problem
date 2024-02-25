@@ -1,13 +1,33 @@
 from argparse import ArgumentParser
 
-DEFAULT_INPUT_FILE = './data/input/tsp-problem-10-30-75-25-1.txt'
+from constants import app_constants
 
 def _add_parser_arguments(parser: ArgumentParser) -> None:
     parser.add_argument(
         '-i', '--input',
         type=str,
         help='Input graph file in the specified format',
-        default=DEFAULT_INPUT_FILE,
+        default=app_constants.DEFAULT_INPUT_FILE,
+        required=False
+    )
+
+    algorithm_choices = list(app_constants.ALGORITHMS.keys())
+    parser.add_argument(
+        '-a', '--algorithm',
+        type=str,
+        choices=algorithm_choices,
+        help='Algorithm to be used',
+        default=algorithm_choices[0],
+        required=False
+    )
+
+    heuristic_choices = list(app_constants.HEURISTICS.keys())
+    parser.add_argument(
+        '-hx', '--heuristic',
+        type=str,
+        choices=heuristic_choices,
+        help='Heuristic to be used in case of A star algorithm',
+        default=heuristic_choices[0],
         required=False
     )
 
