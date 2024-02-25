@@ -1,5 +1,5 @@
 import heapq
-from argparse import Namespace
+from typing import Any
 
 from model.node import Node
 from model.state import State
@@ -9,15 +9,16 @@ from heuristics import heuristic_factory
 from heuristics.heuristic_base import HeuristicBase
 
 class AStar(AlgorithmBase):
-    NAME: str = 'Dijikstra based TSP'
+    NAME: str = 'A Star'
     result: State = None
     heuristic: HeuristicBase = None
 
-    def __init__(self, args: Namespace, n_cities: int, city_graph: list[Node]) -> None:
-        super().__init__(args, n_cities, city_graph)
-        
-        self.heuristic = heuristic_factory.get_heuristic(self.args.heuristic)
-        self.heuristic = self.heuristic()
+    def __init__(self, n_cities: int, city_graph: list[Node], metadata: dict[str, Any]) -> None:
+        super().__init__(n_cities, city_graph, metadata)
+
+        if 'heuristic' not in self.metadata:
+            raise ValueError('Heuristic not provided')
+        self.heuristic = self.metadata['heuristic']
     
     def compute_tour(self, source_id: int, n_cities: int, city_graph: list[Node]) -> State:
         state_space: list[State] = []
@@ -37,18 +38,23 @@ class AStar(AlgorithmBase):
             for neighbor_id in current_state.unvisited:
                 neighbor_path = city_graph[current_state.current_city_id].neighbors[neighbor_id]
                 
-                heuristic_cost = self.heuristic.compute_cost(current_state.current_city_id, neighbor_id)
+                heuristic_cost = self.heuristic.compute_cost(
+                    source_id=neighbor_id,
+                    start_id=source_id,
+                    unmarked_nodes=current_state.unvisited
+                )
                 new_cost = current_state.cost + neighbor_path.weight + heuristic_cost
 
                 new_state = current_state.construct_new_state(
                     neighbor_id=neighbor_id,
-                    cost=new_cost
+                    cost=new_cost,
+                    tour_cost=neighbor_path.weight
                 )
 
                 heapq.heappush(state_space, new_state)
 
     def execute(self):
-        source_id = self.args.source_id
+        source_id = self.metadata['source_id']
         
         self.result = AStar.compute_tour(
             self,
@@ -61,5 +67,7 @@ class AStar(AlgorithmBase):
         return ' -> '.join(map(str, self.result.path))
 
     def getCost(self) -> float:
-        return self.result.cost
+        return self.result.tour_cost
         
+    def getMetadata(self) -> str:
+        return self.heuristic.get_name()

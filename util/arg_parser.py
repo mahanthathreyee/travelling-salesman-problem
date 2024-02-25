@@ -27,7 +27,7 @@ def _add_parser_arguments(parser: ArgumentParser) -> None:
         type=str,
         choices=heuristic_choices,
         help='Heuristic to be used in case of A star algorithm',
-        default=heuristic_choices[0],
+        default=heuristic_choices[1],
         required=False
     )
 

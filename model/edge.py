@@ -25,6 +25,12 @@ class Edge:
         self.destination_id = destination.id
         self.destination_node = destination
 
+    def __lt__(self, other):
+        return self.weight < other.weight
+    
+    def __le__(self, other):
+        return self.weight <= other.weight
+
     def __repr__(self):
         import json
 
@@ -32,9 +38,8 @@ class Edge:
             'weight': self.weight,
             'source_id': self.source_id,
             'destination_id': self.destination_id,
-            'bidirection': self.bidirection,
 
             '__classname__': str(self.__class__.__name__)
         }
 
-        return readable_data
+        return str(readable_data)

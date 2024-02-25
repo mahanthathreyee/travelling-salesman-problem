@@ -5,12 +5,16 @@ from argparse import Namespace
 from util import input_handler
 from util import arg_parser
 
+from constants import app_constants
+
 from core import graph
 from core.algorithm_runner import AlgorithmRunner
 
 from algorithms import algorithm_factory
 from algorithms.algorithm_base import AlgorithmBase
-from algorithms.impl.a_star import AStar
+
+from heuristics import heuristic_factory
+from heuristics.heuristic_base import HeuristicBase
 
 def parse_input(input_file: str):
     graph_file = Path(input_file)
@@ -30,11 +34,20 @@ def get_input():
     return args, input_matrix
 
 def process_algorithm(args: Namespace):
+    heuristic: HeuristicBase = heuristic_factory.get_heuristic(args.heuristic)
+    heuristic = heuristic(
+        n_cities=n_cities, 
+        city_graph=city_graph
+    )
+
     algorithm: AlgorithmBase = algorithm_factory.get_algorithm(args.algorithm)
     algorithm = algorithm(
-        args=args,
         n_cities=n_cities,
-        city_graph=city_graph
+        city_graph=city_graph,
+        metadata={
+            'source_id': args.source_id,
+            'heuristic': heuristic
+        }
     )
 
     runner = AlgorithmRunner(algorithm)

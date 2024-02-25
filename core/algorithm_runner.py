@@ -19,5 +19,6 @@ class AlgorithmRunner:
             'Algorithm': self.algorithm.getName(),
             'Tour': self.algorithm.getTour(),
             'Cost': self.algorithm.getCost(),
-            'Elapsed Time': self.timer.elapsed()
+            'Elapsed Time': self.timer.elapsed(),
+            'Metadata': self.algorithm.getMetadata()
         }
