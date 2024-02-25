@@ -50,8 +50,6 @@ class PrimsMMST(HeuristicBase):
                 visited_nodes=visited_nodes
             )
 
-        print(f'MST Cost: {heuristic_cost} | Source ID: {source_id} | Unmarked Nodes: {unmarked_nodes}')
-
         start_to_nearest_unmarked = float('inf')
         for neighbor_path in self.city_graph[start_id].neighbors:
             if neighbor_path.destination_id in unmarked_nodes and neighbor_path.weight < start_to_nearest_unmarked:
