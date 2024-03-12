@@ -15,4 +15,4 @@ class Timer:
         self.start()
 
     def elapsed(self) -> float:
-        return self.end - self.start
+        return (self.end - self.start) * 1000

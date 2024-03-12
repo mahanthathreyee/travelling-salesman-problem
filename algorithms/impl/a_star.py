@@ -56,8 +56,7 @@ class AStar(AlgorithmBase):
     def execute(self):
         source_id = self.metadata['source_id']
         
-        self.result = AStar.compute_tour(
-            self,
+        self.result = self.compute_tour(
             source_id=source_id,
             n_cities=self.n_cities,
             city_graph=self.city_graph

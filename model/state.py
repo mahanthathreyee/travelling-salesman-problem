@@ -14,7 +14,7 @@ class State:
         self._n_cities = n_cities
         
         if not branch_state:
-            self.path += [ source_id ]
+            self.path = [ source_id ]
             self.unvisited = set( range(n_cities) ) - { source_id }
 
     def __lt__(self, other):

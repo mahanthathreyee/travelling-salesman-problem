@@ -1,20 +1,13 @@
 import pandas as pd
 from pathlib import Path
-from argparse import Namespace
+
+from model.parameter import Parameter
+from process_algorithm import process_heuristic
 
 from util import input_handler
 from util import arg_parser
 
-from constants import app_constants
-
 from core import graph
-from core.algorithm_runner import AlgorithmRunner
-
-from algorithms import algorithm_factory
-from algorithms.algorithm_base import AlgorithmBase
-
-from heuristics import heuristic_factory
-from heuristics.heuristic_base import HeuristicBase
 
 def parse_input(input_file: str):
     graph_file = Path(input_file)
@@ -24,42 +17,25 @@ def parse_input(input_file: str):
 
     return input_handler.parse_input_matrix(graph_file)
 
-def get_input():
-    parser = arg_parser.build_arg_parser()
-    args = parser.parse_args()
-    input_matrix = parse_input(args.input)
-    
+def get_input(args: Parameter):
+    input_matrix = parse_input(args.input_file)
     pd.DataFrame(input_matrix).to_csv('temp.csv', index=False)
-
-    return args, input_matrix
-
-def process_algorithm(args: Namespace):
-    heuristic: HeuristicBase = heuristic_factory.get_heuristic(args.heuristic)
-    heuristic = heuristic(
-        n_cities=n_cities, 
-        city_graph=city_graph
-    )
-
-    algorithm: AlgorithmBase = algorithm_factory.get_algorithm(args.algorithm)
-    algorithm = algorithm(
-        n_cities=n_cities,
-        city_graph=city_graph,
-        metadata={
-            'source_id': args.source_id,
-            'heuristic': heuristic
-        }
-    )
-
-    runner = AlgorithmRunner(algorithm)
-    runner.run()
-    results.append(runner.results())
+    return input_matrix
 
 if __name__ == "__main__":
     results = []
 
-    args, input_matrix = get_input()
+    arg_parser.tsp_argument_group.main(standalone_mode=False)
+
+    input_matrix = get_input(arg_parser.ARGUMENTS)
     n_cities = len(input_matrix)
     city_graph = graph.construct_from_matrix(input_matrix)
 
-    process_algorithm(args)
+    results += process_heuristic(
+        heuristic_selected=arg_parser.ARGUMENTS.heuristic,
+        n_cities=n_cities,
+        city_graph=city_graph,
+        source_id=arg_parser.ARGUMENTS.source_id
+    )
+    
     print(pd.DataFrame(results).to_markdown())

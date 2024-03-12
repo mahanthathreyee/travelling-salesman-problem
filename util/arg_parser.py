@@ -1,45 +1,50 @@
-from argparse import ArgumentParser
+import click
 
 from constants import app_constants
+from model.parameter import Parameter
 
-def _add_parser_arguments(parser: ArgumentParser) -> None:
-    parser.add_argument(
-        '-i', '--input',
-        type=str,
-        help='Input graph file in the specified format',
-        default=app_constants.DEFAULT_INPUT_FILE,
-        required=False
-    )
+ARGUMENTS: Parameter = Parameter()
 
-    algorithm_choices = list(app_constants.ALGORITHMS.keys())
-    parser.add_argument(
-        '-a', '--algorithm',
-        type=str,
-        choices=algorithm_choices,
-        help='Algorithm to be used',
-        default=algorithm_choices[0],
-        required=False
-    )
+#region Heuristic Command
+@click.command()
+@click.option(
+    '--heuristic', '-h', 
+    type=click.Choice(app_constants.HEURISTICS.keys()), 
+    help="Heuristic algorithm to use for A_star algorithm",
+    required=True)
+@click.option(
+    '--source-id', '-s', 
+    type=click.INT, default=0,
+    help="Start node ID for A_star (doesn't affect final result)")
+def heuristic(heuristic, source_id):
+    ARGUMENTS.algorithm = 'a_star'
+    ARGUMENTS.heuristic = heuristic
+    ARGUMENTS.source_id = source_id
+#endregion
 
-    heuristic_choices = list(app_constants.HEURISTICS.keys())
-    parser.add_argument(
-        '-hx', '--heuristic',
-        type=str,
-        choices=heuristic_choices,
-        help='Heuristic to be used in case of A star algorithm',
-        default=heuristic_choices[1],
-        required=False
-    )
+#region Local search Command
+@click.command()
+@click.option('--algorithm', '-a')
+def localsearch(algorithm):
+    return algorithm
+#endregion
 
-    parser.add_argument(
-        '-s', '--source-id',
-        type=int,
-        help='Source node ID range 0 to n-1',
-        default=0,
-        required=False
-    )
+#region Help Command (Default)
+@click.command(no_args_is_help=True)
+def help():
+    pass
+#endregion
 
-def build_arg_parser() -> ArgumentParser:
-    parser = ArgumentParser()
-    _add_parser_arguments(parser=parser)
-    return parser
+#region Group all commands
+@click.group()
+@click.argument(
+    'INPUT_FILE',
+    type=click.Path(exists=True),
+    required=True)
+def tsp_argument_group(input_file):
+    ARGUMENTS.input_file = input_file
+
+tsp_argument_group.add_command(heuristic)
+tsp_argument_group.add_command(localsearch)
+tsp_argument_group.add_command(help)
+# endregion

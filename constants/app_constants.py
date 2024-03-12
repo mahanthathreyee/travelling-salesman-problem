@@ -9,11 +9,14 @@ INFINITY = float('inf')
 
 DEFAULT_INPUT_FILE = './data/input/tsp-problem-10-30-75-25-3.txt'
 
+HEURISTIC_ALGORITHM = 'a_star'
 ALGORITHMS: dict[str, AlgorithmBase] = {
-    'a_star': AStar
+    HEURISTIC_ALGORITHM: AStar
 }
 
+ALL_HEURISTIC = 'all'
 HEURISTICS: dict[str, HeuristicBase] = {
     'zero': Zero,
-    'prims_mst': PrimsMMST
+    'prims_mst': PrimsMMST,
+    ALL_HEURISTIC: None
 }
