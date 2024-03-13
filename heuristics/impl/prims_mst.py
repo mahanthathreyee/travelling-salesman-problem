@@ -1,5 +1,7 @@
 import heapq
 
+from constants import app_constants
+
 from model.edge import Edge
 from model.node import Node
 
@@ -50,7 +52,7 @@ class PrimsMST(HeuristicBase):
                 visited_nodes=visited_nodes
             )
 
-        start_to_nearest_unmarked = float('inf')
+        start_to_nearest_unmarked = app_constants.INFINITY
         for neighbor_path in self.city_graph[start_id].neighbors:
             if neighbor_path.destination_id in unmarked_nodes and neighbor_path.weight < start_to_nearest_unmarked:
                 start_to_nearest_unmarked = neighbor_path.weight

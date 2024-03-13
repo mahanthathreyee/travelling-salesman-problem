@@ -1,11 +1,12 @@
 import heapq
 from typing import Any
 
+from constants import app_constants
+
 from model.node import Node
 from model.state import State
-from algorithms.algorithm_base import AlgorithmBase
 
-from heuristics import heuristic_factory
+from algorithms.algorithm_base import AlgorithmBase
 from heuristics.heuristic_base import HeuristicBase
 
 class AStar(AlgorithmBase):
@@ -16,16 +17,16 @@ class AStar(AlgorithmBase):
     def __init__(self, n_cities: int, city_graph: list[Node], metadata: dict[str, Any]) -> None:
         super().__init__(n_cities, city_graph, metadata)
 
-        if 'heuristic' not in self.metadata:
+        if app_constants.METADATA_HEURISTIC not in self.metadata:
             raise ValueError('Heuristic not provided')
-        self.heuristic = self.metadata['heuristic']
+        self.heuristic = self.metadata[app_constants.METADATA_HEURISTIC]
     
-    def compute_tour(self, source_id: int, n_cities: int, city_graph: list[Node]) -> State:
+    def compute_tour(self, source_id: int) -> State:
         state_space: list[State] = []
 
         initial_state = State(
             source_id=source_id,
-            n_cities=n_cities
+            n_cities=self.n_cities
         )
         heapq.heappush(state_space, initial_state)
 
@@ -36,7 +37,7 @@ class AStar(AlgorithmBase):
                 return current_state
             
             for neighbor_id in current_state.unvisited:
-                neighbor_path = city_graph[current_state.current_city_id].neighbors[neighbor_id]
+                neighbor_path = self.city_graph[current_state.current_city_id].neighbors[neighbor_id]
                 
                 heuristic_cost = self.heuristic.compute_cost(
                     source_id=neighbor_id,
@@ -54,12 +55,10 @@ class AStar(AlgorithmBase):
                 heapq.heappush(state_space, new_state)
 
     def execute(self):
-        source_id = self.metadata['source_id']
+        source_id = self.metadata[app_constants.METADATA_SOURCE_ID]
         
         self.result = self.compute_tour(
-            source_id=source_id,
-            n_cities=self.n_cities,
-            city_graph=self.city_graph
+            source_id=source_id
         )
 
     def getTour(self) -> str:

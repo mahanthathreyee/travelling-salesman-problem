@@ -1,8 +1,4 @@
-import heapq
 from constants import app_constants
-
-from model.edge import Edge
-from model.node import Node
 
 from initial_tour.initial_tour_base import InitialTourBase
 

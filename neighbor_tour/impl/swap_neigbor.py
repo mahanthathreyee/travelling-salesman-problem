@@ -1,7 +1,5 @@
 import random
 
-from model.edge import Edge
-from model.node import Node
 from model.state import State
 
 from neighbor_tour.neighbor_tour_base import NeighborTourBase

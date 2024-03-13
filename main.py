@@ -47,7 +47,8 @@ if __name__ == "__main__":
             intial_tour_selected=arg_parser.ARGUMENTS.initial_tour,
             neighbor_tour_selected=arg_parser.ARGUMENTS.neighbor_tour,
             alpha=arg_parser.ARGUMENTS.alpha,
-            threshold=arg_parser.ARGUMENTS.threshold,
+            initial_threshold=arg_parser.ARGUMENTS.initial_threshold,
+            final_threshold=arg_parser.ARGUMENTS.final_threshold,
             n_cities=n_cities,
             city_graph=city_graph,
             source_id=arg_parser.ARGUMENTS.source_id

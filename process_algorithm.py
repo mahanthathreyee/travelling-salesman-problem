@@ -47,8 +47,8 @@ def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[N
         )
 
         metadata = {
-            'source_id': source_id,
-            'heuristic': heuristic
+            app_constants.METADATA_SOURCE_ID: source_id,
+            app_constants.METADATA_HEURISTIC: heuristic
         }
 
         results.append(
@@ -62,7 +62,7 @@ def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[N
 
     return results
 
-def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, alpha: float, threshold: float, n_cities:int, city_graph: list[Node], source_id: int):
+def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, alpha: float, initial_threshold: float, final_threshold: float, n_cities:int, city_graph: list[Node], source_id: int):
     results = []
 
     initial_tour: InitialTourBase = initial_tour_factory.get_initial_tour(intial_tour_selected)
@@ -78,11 +78,12 @@ def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, 
     )
 
     metadata = {
-        'source_id': source_id,
-        'initial_tour': initial_tour,
-        'neighbor_tour': neighbor_tour,
-        'alpha': alpha,
-        'threshold': threshold
+        app_constants.METADATA_SOURCE_ID: source_id,
+        app_constants.METADATA_INITIAL_TOUR: initial_tour,
+        app_constants.METADATA_NEIGHBOR_TOUR: neighbor_tour,
+        app_constants.METADATA_ALPHA: alpha,
+        app_constants.METADATA_INITIAL_THRESHOLD: initial_threshold,
+        app_constants.METADATA_FINAL_THRESHOLD: final_threshold
     }
 
     results.append(

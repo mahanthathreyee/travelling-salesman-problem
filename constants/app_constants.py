@@ -37,3 +37,11 @@ INITIAL_TOUR: dict[str, InitialTourBase] = {
 NEIGHBOR_TOUR: dict[str, NeighborTourBase] = {
     'swap': SwapNeighborTour
 }
+
+METADATA_ALPHA = 'alpha'
+METADATA_HEURISTIC = 'heuristic'
+METADATA_SOURCE_ID = 'source_id'
+METADATA_INITIAL_THRESHOLD = 'initial_threshold'
+METADATA_FINAL_THRESHOLD = 'final_threshold'
+METADATA_INITIAL_TOUR = 'initial_tour'
+METADATA_NEIGHBOR_TOUR = 'neighbor_tour'

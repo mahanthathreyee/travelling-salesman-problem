@@ -1,12 +1,12 @@
-import heapq
 from typing import Any
-from initial_tour.initial_tour_base import InitialTourBase
+
+from constants import app_constants
 
 from model.node import Node
 from model.state import State
-from algorithms.algorithm_base import AlgorithmBase
 
-from heuristics.heuristic_base import HeuristicBase
+from algorithms.algorithm_base import AlgorithmBase
+from initial_tour.initial_tour_base import InitialTourBase
 from neighbor_tour.neighbor_tour_base import NeighborTourBase
 
 class AdaptiveSimulatedAnnealing(AlgorithmBase):
@@ -16,28 +16,33 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
     initial_tour: InitialTourBase = None
     neighbor_tour: NeighborTourBase = None
     alpha: float = None
+    initial_threshold: float = None
     final_threshold: float = None
 
     def __init__(self, n_cities: int, city_graph: list[Node], metadata: dict[str, Any]) -> None:
         super().__init__(n_cities, city_graph, metadata)
 
-        if 'initial_tour' not in self.metadata:
+        if app_constants.METADATA_INITIAL_TOUR not in self.metadata:
             raise ValueError('Initial Tour not provided')
-        self.initial_tour = self.metadata['initial_tour']
+        self.initial_tour = self.metadata[app_constants.METADATA_INITIAL_TOUR]
 
-        if 'neighbor_tour' not in self.metadata:
+        if app_constants.METADATA_NEIGHBOR_TOUR not in self.metadata:
             raise ValueError('Neighbor Tour not provided')
-        self.neighbor_tour = self.metadata['neighbor_tour']
+        self.neighbor_tour = self.metadata[app_constants.METADATA_NEIGHBOR_TOUR]
 
-        if 'alpha' not in self.metadata:
+        if app_constants.METADATA_ALPHA not in self.metadata:
             raise ValueError('Alpha not provided')
-        self.alpha = self.metadata['alpha']
+        self.alpha = self.metadata[app_constants.METADATA_ALPHA]
 
-        if 'threshold' not in self.metadata:
+        if app_constants.METADATA_INITIAL_THRESHOLD not in self.metadata:
+            raise ValueError('Initial Threshold not provided')
+        self.initial_threshold = self.metadata[app_constants.METADATA_INITIAL_THRESHOLD]
+
+        if app_constants.METADATA_FINAL_THRESHOLD not in self.metadata:
             raise ValueError('Final Threshold not provided')
-        self.final_threshold = self.metadata['threshold']
+        self.final_threshold = self.metadata[app_constants.METADATA_FINAL_THRESHOLD]
     
-    def compute_tour(self, source_id: int, n_cities: int, city_graph: list[Node]) -> State:
+    def compute_tour(self, source_id: int) -> State:
         tour = self.initial_tour.create_initial_tour(
             source_id=source_id
         )
@@ -51,7 +56,7 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
         current_state.tour_cost = self.compute_tour_cost(current_state.path)
         current_state.cost = current_state.tour_cost
 
-        current_threshold = 10
+        current_threshold = self.initial_threshold
 
         while current_threshold > self.final_threshold:
             new_state = self.neighbor_tour.generate_neighbor_tour(
@@ -76,12 +81,10 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
         return tour_cost
 
     def execute(self):
-        source_id = self.metadata['source_id']
+        source_id = self.metadata[app_constants.METADATA_SOURCE_ID]
         
         self.result = self.compute_tour(
-            source_id=source_id,
-            n_cities=self.n_cities,
-            city_graph=self.city_graph
+            source_id=source_id
         )
 
     def getTour(self) -> str:
@@ -92,8 +95,9 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
         
     def getMetadata(self) -> str:
         return {
-            "initial_tour": self.initial_tour.get_name(),
-            "neighbor_tour": self.neighbor_tour.get_name(),
-            "alpha": self.alpha,
-            "final_threshold": self.final_threshold
+            'initial_tour': self.initial_tour.get_name(),
+            'neighbor_tour': self.neighbor_tour.get_name(),
+            'alpha': self.alpha,
+            'initial_threshold': self.initial_threshold,
+            'final_threshold': self.final_threshold
         }

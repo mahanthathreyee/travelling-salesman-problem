@@ -32,8 +32,6 @@ class Edge:
         return self.weight <= other.weight
 
     def __repr__(self):
-        import json
-
         readable_data = {
             'weight': self.weight,
             'source_id': self.source_id,

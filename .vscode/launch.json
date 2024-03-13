@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "main.py",
             "console": "integratedTerminal",
-            "args": ["data/input/tsp-problem-10-30-75-25-1.txt", "localsearch", "-i", "swap", "-nb", "greedy", "-a", "0.7", "-t", "0.1"]
+            "args": ["data/input/tsp-problem-10-30-75-25-1.txt", "localsearch", "-i", "greedy", "-nb", "swap", "-a", "0.999", "-ti", "0.01", "-tf", "3"]
         }
     ]
 }

@@ -40,7 +40,12 @@ def heuristic(heuristic: str, source_id: int):
     help="Cooling rate for SA",
     required=True)
 @click.option(
-    '--threshold', '-t', 
+    '--initial-threshold', '-ti', 
+    type=click.FLOAT, 
+    help="Initial threshold rate for SA",
+    required=True)
+@click.option(
+    '--final-threshold', '-tf', 
     type=click.FLOAT, 
     help="Final threshold rate for SA",
     required=True)
@@ -48,12 +53,13 @@ def heuristic(heuristic: str, source_id: int):
     '--source-id', '-s', 
     type=click.INT, default=0,
     help="Start node ID for SA (doesn't affect final result)")
-def localsearch(initial_tour: str, neighbor_tour: str, alpha: float, threshold: float, source_id: int):
+def localsearch(initial_tour: str, neighbor_tour: str, alpha: float, initial_threshold: float, final_threshold: float, source_id: int):
     ARGUMENTS.algorithm = app_constants.SLS_ALGORITHM
     ARGUMENTS.initial_tour = initial_tour
     ARGUMENTS.neighbor_tour = neighbor_tour
     ARGUMENTS.alpha = alpha
-    ARGUMENTS.threshold = threshold
+    ARGUMENTS.initial_threshold = initial_threshold
+    ARGUMENTS.final_threshold = final_threshold
     ARGUMENTS.source_id = source_id
 #endregion
 
