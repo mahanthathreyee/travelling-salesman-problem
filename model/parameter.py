@@ -4,9 +4,14 @@ class Parameter:
     input_file: Path = None
 
     algorithm: str = None
+    source_id: str = None
 
     heuristic: str = None
-    source_id: str = None
+
+    initial_tour: str = None
+    neighbor_tour: str = None
+    alpha: float = None
+    threshold: float = None
 
     def __repr__(self):
         import json

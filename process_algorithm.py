@@ -8,6 +8,12 @@ from algorithms.algorithm_base import AlgorithmBase
 from heuristics import heuristic_factory
 from heuristics.heuristic_base import HeuristicBase
 
+from initial_tour import initial_tour_factory
+from initial_tour.initial_tour_base import InitialTourBase
+
+from neighbor_tour import neighbor_tour_factory
+from neighbor_tour.neighbor_tour_base import NeighborTourBase
+
 from model.node import Node
 from core.algorithm_runner import AlgorithmRunner
 
@@ -53,5 +59,39 @@ def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[N
                 metadata=metadata
             )
         )
+
+    return results
+
+def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, alpha: float, threshold: float, n_cities:int, city_graph: list[Node], source_id: int):
+    results = []
+
+    initial_tour: InitialTourBase = initial_tour_factory.get_initial_tour(intial_tour_selected)
+    initial_tour = initial_tour(
+        n_cities=n_cities, 
+        city_graph=city_graph
+    )
+
+    neighbor_tour: NeighborTourBase = neighbor_tour_factory.get_neighbor_tour(neighbor_tour_selected)
+    neighbor_tour = neighbor_tour(
+        n_cities=n_cities, 
+        city_graph=city_graph
+    )
+
+    metadata = {
+        'source_id': source_id,
+        'initial_tour': initial_tour,
+        'neighbor_tour': neighbor_tour,
+        'alpha': alpha,
+        'threshold': threshold
+    }
+
+    results.append(
+        process_algorithm(
+            algorithm=app_constants.SLS_ALGORITHM,
+            n_cities=n_cities,
+            city_graph=city_graph,
+            metadata=metadata
+        )
+    )
 
     return results

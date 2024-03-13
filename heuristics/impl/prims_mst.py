@@ -5,7 +5,7 @@ from model.node import Node
 
 from heuristics.heuristic_base import HeuristicBase
 
-class PrimsMMST(HeuristicBase):
+class PrimsMST(HeuristicBase):
     NAME: str = 'Prims MST'
 
     def include_active_edges(self, edge_queue: list[Edge], source_id: int, unmarked_nodes: set[int], visited_nodes: set[int]):

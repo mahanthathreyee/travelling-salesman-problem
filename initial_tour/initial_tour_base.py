@@ -2,9 +2,8 @@ from abc import ABC
 
 from model.node import Node
 
-class HeuristicBase(ABC):
+class InitialTourBase(ABC):
     NAME: str = None
-    cache: dict[frozenset, float] = {}
 
     n_cities: int = None
     city_graph: list[Node] = None
@@ -18,5 +17,5 @@ class HeuristicBase(ABC):
     def get_name(self) -> str:
         return self.NAME
     
-    def compute_cost(self, source_id: int, start_id: int, unmarked_nodes: set[int]) -> float:
+    def create_initial_tour(self, source_id: int) -> list[int]:
         pass
