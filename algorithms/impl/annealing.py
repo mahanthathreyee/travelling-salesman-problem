@@ -1,3 +1,5 @@
+import math
+import random
 from typing import Any
 
 from constants import app_constants
@@ -16,6 +18,7 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
     initial_tour: InitialTourBase = None
     neighbor_tour: NeighborTourBase = None
     alpha: float = None
+    alpha_factor: float = None
     initial_threshold: float = None
     final_threshold: float = None
 
@@ -33,6 +36,10 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
         if app_constants.METADATA_ALPHA not in self.metadata:
             raise ValueError('Alpha not provided')
         self.alpha = self.metadata[app_constants.METADATA_ALPHA]
+        
+        if app_constants.METADATA_ALPHA_FACTOR not in self.metadata:
+            raise ValueError('Alpha adaptive factor not provided')
+        self.alpha_factor = self.metadata[app_constants.METADATA_ALPHA_FACTOR]
 
         if app_constants.METADATA_INITIAL_THRESHOLD not in self.metadata:
             raise ValueError('Initial Threshold not provided')
@@ -57,18 +64,25 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
         current_state.cost = current_state.tour_cost
 
         current_threshold = self.initial_threshold
+        current_iteration = 0
 
-        while current_threshold > self.final_threshold:
+        while current_threshold > self.final_threshold and current_iteration < app_constants.DEFAULT_MAX_ITERATIONS:
             new_state = self.neighbor_tour.generate_neighbor_tour(
                 current_state=current_state
             )
             new_state.tour_cost = self.compute_tour_cost(new_state.path)
             new_state.cost = new_state.tour_cost
 
-            if new_state < current_state:
-                current_state = new_state
+            self.adapt_cooling_rate(
+                current_state=current_state,
+                new_state=new_state
+            )
 
+            if new_state < current_state or self.compute_acceptance_probability(current_threshold, current_state, new_state):
+                current_state = new_state
+                
             current_threshold = current_threshold * self.alpha
+            current_iteration += 1
         
         return current_state
 
@@ -79,6 +93,22 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
             tour_cost += self.city_graph[node_i_id].neighbors[node_j_id].weight
 
         return tour_cost
+    
+    def compute_acceptance_probability(self, current_threshold: float, current_state: State, new_sate: State):
+        minimum_random_chance = random.random()
+        acceptance_probability = 1 / math.exp(
+            (new_sate.cost - current_state.cost) / current_threshold
+        )
+        # print(f'Chance: {minimum_random_chance} | Acp: {acceptance_probability} | C: {new_sate.cost - current_state.cost} | T: {current_threshold}')
+
+        return acceptance_probability > minimum_random_chance
+
+    def adapt_cooling_rate(self, current_state: State, new_state: State):
+        if new_state < current_state:
+            self.alpha *= 1 + self.alpha_factor
+        else:
+            self.alpha *= 1 - self.alpha_factor
+
 
     def execute(self):
         source_id = self.metadata[app_constants.METADATA_SOURCE_ID]
@@ -98,6 +128,7 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
             'initial_tour': self.initial_tour.get_name(),
             'neighbor_tour': self.neighbor_tour.get_name(),
             'alpha': self.alpha,
+            'alpha_factor': self.alpha_factor,
             'initial_threshold': self.initial_threshold,
             'final_threshold': self.final_threshold
         }

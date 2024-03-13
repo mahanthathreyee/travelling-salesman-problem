@@ -1,4 +1,5 @@
 import sys
+import random
 import pandas as pd
 from pathlib import Path
 
@@ -25,6 +26,7 @@ def get_input(args: Parameter):
     return input_matrix
 
 if __name__ == "__main__":
+    random.seed(app_constants.DEFAULT_RANDOM_SEED)
     results = []
 
     arg_parser.tsp_argument_group.main(standalone_mode=False)
@@ -47,6 +49,7 @@ if __name__ == "__main__":
             intial_tour_selected=arg_parser.ARGUMENTS.initial_tour,
             neighbor_tour_selected=arg_parser.ARGUMENTS.neighbor_tour,
             alpha=arg_parser.ARGUMENTS.alpha,
+            alpha_factor=arg_parser.ARGUMENTS.alpha_factor,
             initial_threshold=arg_parser.ARGUMENTS.initial_threshold,
             final_threshold=arg_parser.ARGUMENTS.final_threshold,
             n_cities=n_cities,

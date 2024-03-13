@@ -62,7 +62,7 @@ def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[N
 
     return results
 
-def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, alpha: float, initial_threshold: float, final_threshold: float, n_cities:int, city_graph: list[Node], source_id: int):
+def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, alpha: float, alpha_factor: float, initial_threshold: float, final_threshold: float, n_cities:int, city_graph: list[Node], source_id: int):
     results = []
 
     initial_tour: InitialTourBase = initial_tour_factory.get_initial_tour(intial_tour_selected)
@@ -82,6 +82,7 @@ def process_localsearch(intial_tour_selected: str, neighbor_tour_selected: int, 
         app_constants.METADATA_INITIAL_TOUR: initial_tour,
         app_constants.METADATA_NEIGHBOR_TOUR: neighbor_tour,
         app_constants.METADATA_ALPHA: alpha,
+        app_constants.METADATA_ALPHA_FACTOR: alpha_factor,
         app_constants.METADATA_INITIAL_THRESHOLD: initial_threshold,
         app_constants.METADATA_FINAL_THRESHOLD: final_threshold
     }

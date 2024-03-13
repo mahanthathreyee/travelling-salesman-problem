@@ -14,7 +14,9 @@ from neighbor_tour.impl.swap_neigbor import SwapNeighborTour
 
 INFINITY = float('inf')
 
+DEFAULT_RANDOM_SEED = 1234
 DEFAULT_INPUT_FILE = './data/input/tsp-problem-10-30-75-25-3.txt'
+DEFAULT_MAX_ITERATIONS = 1_000_000
 
 HEURISTIC_ALGORITHM = 'a_star'
 SLS_ALGORITHM = 'sa'
@@ -41,7 +43,8 @@ NEIGHBOR_TOUR: dict[str, NeighborTourBase] = {
 METADATA_ALPHA = 'alpha'
 METADATA_HEURISTIC = 'heuristic'
 METADATA_SOURCE_ID = 'source_id'
-METADATA_INITIAL_THRESHOLD = 'initial_threshold'
-METADATA_FINAL_THRESHOLD = 'final_threshold'
+METADATA_ALPHA_FACTOR = 'alpha_factor'
 METADATA_INITIAL_TOUR = 'initial_tour'
 METADATA_NEIGHBOR_TOUR = 'neighbor_tour'
+METADATA_FINAL_THRESHOLD = 'final_threshold'
+METADATA_INITIAL_THRESHOLD = 'initial_threshold'

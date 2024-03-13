@@ -11,6 +11,7 @@ class Parameter:
     initial_tour: str = None
     neighbor_tour: str = None
     alpha: float = None
+    alpha_factor: float = None
     initial_threshold: float = None
     final_threshold: float = None
 
