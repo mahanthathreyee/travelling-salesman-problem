@@ -80,7 +80,7 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
 
             if new_state < current_state or self.compute_acceptance_probability(current_threshold, current_state, new_state):
                 current_state = new_state
-                
+
             current_threshold = current_threshold * self.alpha
             current_iteration += 1
         
@@ -96,9 +96,14 @@ class AdaptiveSimulatedAnnealing(AlgorithmBase):
     
     def compute_acceptance_probability(self, current_threshold: float, current_state: State, new_sate: State):
         minimum_random_chance = random.random()
-        acceptance_probability = 1 / math.exp(
-            (new_sate.cost - current_state.cost) / current_threshold
-        )
+
+        try:
+            acceptance_probability = 1 / math.exp(
+                (new_sate.cost - current_state.cost) / current_threshold
+            )
+        except OverflowError:
+            # In case  the exponential value is very high then acceptance probability is 0
+            acceptance_probability = 0
         # print(f'Chance: {minimum_random_chance} | Acp: {acceptance_probability} | C: {new_sate.cost - current_state.cost} | T: {current_threshold}')
 
         return acceptance_probability > minimum_random_chance

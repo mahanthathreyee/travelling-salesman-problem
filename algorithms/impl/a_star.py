@@ -8,6 +8,7 @@ from model.state import State
 
 from algorithms.algorithm_base import AlgorithmBase
 from heuristics.heuristic_base import HeuristicBase
+from initial_tour.impl.greedy_initial import GreedyInitialTour
 
 class AStar(AlgorithmBase):
     NAME: str = 'A Star'
@@ -22,7 +23,11 @@ class AStar(AlgorithmBase):
         self.heuristic = self.metadata[app_constants.METADATA_HEURISTIC]
     
     def compute_tour(self, source_id: int) -> State:
+        current_longest_path = 0
+        best_state: State = None
         state_space: list[State] = []
+
+        global_minimum_cost = self.compute_initial_tour_cost(source_id=source_id)
 
         initial_state = State(
             source_id=source_id,
@@ -34,7 +39,10 @@ class AStar(AlgorithmBase):
             current_state = heapq.heappop(state_space)
 
             if not current_state.unvisited:
-                return current_state
+                # All nodes have been visited
+                if current_state.cost < global_minimum_cost:
+                    global_minimum_cost = current_state.cost
+                    best_state = current_state
             
             for neighbor_id in current_state.unvisited:
                 neighbor_path = self.city_graph[current_state.current_city_id].neighbors[neighbor_id]
@@ -52,7 +60,27 @@ class AStar(AlgorithmBase):
                     tour_cost=neighbor_path.weight
                 )
 
-                heapq.heappush(state_space, new_state)
+                if new_state.cost < global_minimum_cost:
+                    heapq.heappush(state_space, new_state)
+
+                if len(new_state.path) > current_longest_path:
+                    current_longest_path = len(new_state.path)
+                    print(f'Current Path Length: {current_longest_path} of {self.n_cities} | State Space Size: {len(state_space)}')
+
+        return best_state
+    
+    def compute_initial_tour_cost(self, source_id: int) -> float:
+        initial_tour = GreedyInitialTour(
+            n_cities=self.n_cities,
+            city_graph=self.city_graph
+        )
+        tour = initial_tour.create_initial_tour(source_id=source_id)
+
+        tour_cost: float = 0
+        for node_i_id, node_j_id in zip(tour, tour[1:]):
+            tour_cost += self.city_graph[node_i_id].neighbors[node_j_id].weight
+
+        return tour_cost
 
     def execute(self):
         source_id = self.metadata[app_constants.METADATA_SOURCE_ID]
