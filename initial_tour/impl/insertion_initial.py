@@ -35,5 +35,4 @@ class InsertionInitialTour(InitialTourBase):
             tour.insert(next_node_index, shortest_next_node)
             visited.add(shortest_next_node)
 
-        print('Tour created')
         return tour

@@ -13,12 +13,18 @@ ARGUMENTS: Parameter = Parameter()
     help="Heuristic algorithm to use for A_star algorithm",
     required=True)
 @click.option(
+    '--initial-tour', '-i', 
+    type=click.Choice(app_constants.INITIAL_TOUR.keys()), 
+    help="Initial tour generation algorithn for SA",
+    required=True)
+@click.option(
     '--source-id', '-s', 
     type=click.INT, default=0,
     help="Start node ID for A_star (doesn't affect final result)")
-def heuristic(heuristic: str, source_id: int):
+def heuristic(heuristic: str, initial_tour: str, source_id: int):
     ARGUMENTS.algorithm = app_constants.HEURISTIC_ALGORITHM
     ARGUMENTS.heuristic = heuristic
+    ARGUMENTS.initial_tour = initial_tour
     ARGUMENTS.source_id = source_id
 #endregion
 

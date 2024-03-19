@@ -29,7 +29,7 @@ def process_algorithm(algorithm: str, n_cities: int, city_graph: list[Node], met
     runner.run()
     return runner.results()
 
-def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[Node], source_id: int):
+def process_heuristic(heuristic_selected: str, intial_tour_selected: str, n_cities: int, city_graph: list[Node], source_id: int):
     if heuristic_selected == app_constants.ALL_HEURISTIC:
         heuristic_selected = filter(
             lambda key: key != app_constants.ALL_HEURISTIC, 
@@ -46,9 +46,16 @@ def process_heuristic(heuristic_selected: str, n_cities: int, city_graph: list[N
             city_graph=city_graph
         )
 
+        initial_tour: InitialTourBase = initial_tour_factory.get_initial_tour(intial_tour_selected)
+        initial_tour = initial_tour(
+            n_cities=n_cities, 
+            city_graph=city_graph
+        )
+
         metadata = {
             app_constants.METADATA_SOURCE_ID: source_id,
-            app_constants.METADATA_HEURISTIC: heuristic
+            app_constants.METADATA_HEURISTIC: heuristic,
+            app_constants.METADATA_INITIAL_TOUR: initial_tour
         }
 
         results.append(

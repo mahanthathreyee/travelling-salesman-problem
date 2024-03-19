@@ -39,10 +39,11 @@ if __name__ == "__main__":
 
     if arg_parser.ARGUMENTS.algorithm == app_constants.HEURISTIC_ALGORITHM:
         results += process_heuristic(
-            heuristic_selected=arg_parser.ARGUMENTS.heuristic,
             n_cities=n_cities,
             city_graph=city_graph,
-            source_id=arg_parser.ARGUMENTS.source_id
+            source_id=arg_parser.ARGUMENTS.source_id,
+            heuristic_selected=arg_parser.ARGUMENTS.heuristic,
+            intial_tour_selected=arg_parser.ARGUMENTS.initial_tour
         )
     else:
         results += process_localsearch(
