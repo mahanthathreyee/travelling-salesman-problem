@@ -8,9 +8,12 @@ from heuristics.heuristic_base import HeuristicBase
 
 from initial_tour.initial_tour_base import InitialTourBase
 from initial_tour.impl.greedy_initial import GreedyInitialTour
+from neighbor_tour.impl.insertion import InsertionNeighborTour
+from initial_tour.impl.insertion_initial import InsertionInitialTour
 
-from neighbor_tour.neighbor_tour_base import NeighborTourBase
+from neighbor_tour.impl.two_opt import TwoOptNeighborTour
 from neighbor_tour.impl.swap_neigbor import SwapNeighborTour
+from neighbor_tour.neighbor_tour_base import NeighborTourBase
 
 INFINITY = float('inf')
 
@@ -33,11 +36,14 @@ HEURISTICS: dict[str, HeuristicBase] = {
 }
 
 INITIAL_TOUR: dict[str, InitialTourBase] = {
-    'greedy': GreedyInitialTour
+    'greedy': GreedyInitialTour,
+    'insertion': InsertionInitialTour
 }
 
 NEIGHBOR_TOUR: dict[str, NeighborTourBase] = {
-    'swap': SwapNeighborTour
+    'swap': SwapNeighborTour,
+    'two_opt': TwoOptNeighborTour,
+    'insertion': InsertionNeighborTour
 }
 
 METADATA_ALPHA = 'alpha'
