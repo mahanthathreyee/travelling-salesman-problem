@@ -39,10 +39,6 @@ It is highly recommended to use a virtual environment for this project to isolat
     pip install -r requirements.txt
     ```
 
-Certainly! Organizing the options into tables will make the README clearer and easier for users to navigate. Here's the updated section with options presented in table format.
-
----
-
 ## Usage Guide
 
 Run the TSP solver by navigating to the project directory in your terminal and executing the following command:
@@ -57,12 +53,24 @@ Replace `[OPTIONS]` with the specific options or commands tailored to your TSP p
 
 **Heuristic (A Star)**
 ```bash
-python3 main.py data/input/tsp-problem-10-30-75-25-1.txt heuristic -h prims_mst -i greedy source_id 1
+python3 main.py data/input/tsp-problem-10-30-75-25-1.txt \
+    heuristic                                            \
+    --heuristic prims_mst                                \
+    --initial-tour greedy                                \
+    --source-id 1
 ```
 
 **Local Search (Adaptive Simulated Annealing)**
 ```bash
-python3 main.py data/input/tsp-problem-10-30-75-25-1.txt localsearch -i greedy -nb swap -a 1 -af 0.0001 -ti 10000 -tf 1 -s 1
+python3 main.py data/input/tsp-problem-10-30-75-25-1.txt \
+    localsearch                                          \
+    --initial-tour greedy                                \
+    --neighbor-tour swap                                 \
+    --alpha 1                                            \
+    --alpha-factor 0.0001                                \
+    --initial-threshold 10000                            \
+    --final-threshold 1                                  \
+    --source-id 1
 ```
 
 ### Heuristic (A Star)
