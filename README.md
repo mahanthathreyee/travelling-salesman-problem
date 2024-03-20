@@ -39,7 +39,7 @@ It is highly recommended to use a virtual environment for this project to isolat
     pip install -r requirements.txt
     ```
 
-### Example
+## Example
 
 **Heuristic (A Star)**
 ```bash
