@@ -39,16 +39,6 @@ It is highly recommended to use a virtual environment for this project to isolat
     pip install -r requirements.txt
     ```
 
-## Usage Guide
-
-Run the TSP solver by navigating to the project directory in your terminal and executing the following command:
-
-```bash
-python3 main.py [OPTIONS]
-```
-
-Replace `[OPTIONS]` with the specific options or commands tailored to your TSP problem. The tables below detail the main commands and options available for ease of use and clarity.
-
 ### Example
 
 **Heuristic (A Star)**
@@ -72,6 +62,16 @@ python3 main.py data/input/tsp-problem-10-30-75-25-1.txt \
     --final-threshold 1                                  \
     --source-id 1
 ```
+
+## Usage Guide
+
+Run the TSP solver by navigating to the project directory in your terminal and executing the following command:
+
+```bash
+python3 main.py [OPTIONS]
+```
+
+Replace `[OPTIONS]` with the specific options or commands tailored to your TSP problem. The tables below detail the main commands and options available for ease of use and clarity.
 
 ### Heuristic (A Star)
 
