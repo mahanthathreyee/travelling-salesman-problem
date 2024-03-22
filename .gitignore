@@ -3,3 +3,4 @@ env/
 temp.*
 temp/
 **/.DS_Store
+data/input/competition/

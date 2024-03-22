@@ -31,8 +31,7 @@ ALGORITHMS: dict[str, AlgorithmBase] = {
 ALL_HEURISTIC = 'all'
 HEURISTICS: dict[str, HeuristicBase] = {
     'zero': Zero,
-    'prims_mst': PrimsMST,
-    ALL_HEURISTIC: None
+    'prims_mst': PrimsMST
 }
 
 INITIAL_TOUR: dict[str, InitialTourBase] = {
