@@ -13,10 +13,10 @@ class InsertionNeighborTour(NeighborTourBase):
         if len(tour) <= 2:
             return current_state
         
-        i = random.sample(tour, 1)
+        i = random.sample(tour, 1)[0]
         city_id_i = tour[i]
         del tour[i]
-        j = random.sample(tour, 1)
+        j = random.sample(tour, 1)[0]
         tour.insert(j, city_id_i)
 
         new_state = State(
