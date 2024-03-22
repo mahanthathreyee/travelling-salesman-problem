@@ -13,7 +13,7 @@ This project offers a solution to the Traveling Salesman Problem (TSP), for the 
 
 Before diving into the usage of this project, please ensure you meet the following prerequisites:
 
-- **Python 3.x** installed on your machine.
+- **Python >=3.9** installed on your machine.
 
 It is highly recommended to use a virtual environment for this project to isolate its dependencies from your global Python setup.
 
